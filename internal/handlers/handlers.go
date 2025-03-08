@@ -18,17 +18,6 @@ func NewHandler(service *service.Service) *Handler {
 	return &Handler{service: service}
 }
 
-// @Summary Получить список песен
-// @Tags Songs
-// @Produce json
-// @Param group query string false "Название группы"
-// @Param song query string false "Название песни"
-// @Param page query int false "Номер страницы"
-// @Param size query int false "Размер страницы"
-// @Success 200 {array} models.Songs
-// @Failure 500 {object} map[string]string
-// @Router /library [get]
-
 func (h *Handler) GetSongs(c *gin.Context) {
 	filters := map[string]interface{}{
 		"group": c.Query("group"),

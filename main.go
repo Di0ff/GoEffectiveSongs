@@ -9,11 +9,38 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+// @title Songs API
+// @version 1.0
+// @description API для работы с песнями
+// @host localhost:8080
+// @BasePath /
+
+// @Summary Получить информацию о песне
+// @Description Возвращает текст, дату выхода и ссылку на песню
+// @Tags songs
+// @Accept  json
+// @Produce  json
+// @Param group query string true "Название группы"
+// @Param song query string true "Название песни"
+// @Success 200 {object} SongDetail
+// @Failure 400 {string} string "Bad request"
+// @Failure 500 {string} string "Internal server error"
+// @Router /info [get]
+
+func getSongInfo(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"releaseDate": "16.07.2006",
+		"text":        "Ooh baby, don't you know I suffer?\nOoh baby...",
+		"link":        "https://www.youtube.com/watch?v=Xsp3_a-PMTw",
+	})
+}
 
 func main() {
 	cfg, err := config.LoadConfig()
@@ -41,6 +68,7 @@ func main() {
 	r.PUT("/song/:id", handler.UpdateSong)
 	r.POST("/song", handler.CreateSong)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/info", getSongInfo)
 
 	log.Println("Starting server on :8080")
 	r.Run(":8080")
